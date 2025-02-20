@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Google map Extractor",
+  "version": "1.0",
+  "permissions": ["scripting", "activeTab"],
+  "host_permissions": ["<all_urls>", "https://petsnvet.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://google.com/maps/*", "https://www.google.com/maps/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
