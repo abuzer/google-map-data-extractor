@@ -1,10 +1,19 @@
+ function doesUrlMatchPattern(url) {
+    const pattern = /^https?:\/\/(www\.)?google\.com\/maps\/place/;
+    return pattern.test(url);
+}
  async function processLinks() {
     var links = document.querySelectorAll('[role="feed"] a');
+    console.log( links );
 
     for (const link of links) {
         var selectLink = link;
-        selectLink.click();
 
+        if( !doesUrlMatchPattern(link.href)){
+            continue;
+        }
+        selectLink.click();
+        button.innerText = link.href;
         // Wait for 3 seconds before processing the right pane
         await new Promise(resolve => setTimeout(resolve, 3000));
 
@@ -18,6 +27,9 @@
         var phone = rightPane.querySelector('[data-tooltip="Copy phone number"]')?.getAttribute('aria-label') || '';
         var website = rightPane.querySelector('[data-tooltip="Open website"]')?.getAttribute('aria-label') || '';
         if (website) website = website.replace('Website: ', '');
+
+
+                button.innerText = title;
 
         var about = '';
         try {
@@ -38,9 +50,12 @@
         var url = window.location.href;
 
         var postData = { image, about, title, address, phone, website, serviceLink, bookingLink, plusCode, url };
+        console.log( postData )
         // Optional: Add additional delay before processing the next link
+
+        
         chrome.runtime.sendMessage({ action: "sendData", data: postData });
-        await new Promise(resolve => setTimeout(resolve, 200));
+        await new Promise(resolve => setTimeout(resolve, 2000));
     }
 }
 
